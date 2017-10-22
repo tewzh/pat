@@ -1,0 +1,74 @@
+// pata1099.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"algorithm"
+#include"queue"
+#include"stack"
+using namespace std;
+
+const int N = 105;
+int a[N][2],b[N],n;       //数组a存放left_index,right_index,数组b存放data信息
+
+struct node{
+	int data;
+	node *lchild, *rchild;
+};
+
+stack<int> st;                           //定义一个递归栈
+int index = 0;
+node* createTree(int a[][2]){
+	if (index > n)
+		return NULL;
+	node* root = new node;
+	root->lchild = root->rchild = NULL;
+	st.push(index++);
+	if (a[st.top()][0] != -1)
+		root->lchild = createTree(a);
+	if (a[st.top()][1] != -1)
+		root->rchild = createTree(a);
+	st.pop();
+	return root;
+}
+
+int k = 0;
+void inOrder(node* root){                 //中序遍历插入
+	if (root == NULL)
+		return;
+	inOrder(root->lchild);
+	root->data = b[k++];
+	inOrder(root->rchild);
+}
+
+void layerOrder(node* root){            //层序遍历输出结果
+	queue<node *> q;
+	q.push(root);
+	int nm = 0;                  
+	while (!q.empty()){
+		node* now = q.front();
+		q.pop();
+		cout << now->data;
+		nm++;                      //nm控制输出的变量个数
+		if (nm < n)
+			cout << " ";
+		if (now->lchild != NULL)
+			q.push(now->lchild);
+		if (now->rchild != NULL)
+			q.push(now->rchild);
+	}
+	
+}
+
+
+void main(){
+	cin >> n;
+    for (int i = 0; i < n; i++)
+		cin >> a[i][0] >> a[i][1];
+	for (int i = 0; i < n; i++)
+		cin >> b[i];
+	sort(b, b + n);                    //对输入数据进行排序等待操作
+	node* root = createTree(a);
+	inOrder(root);
+	layerOrder(root);
+}
