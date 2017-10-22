@@ -1,0 +1,30 @@
+// pata1092.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+void main(){
+	string str1, str2;
+	cin >> str1 >> str2;             //str1定义给定的beads,str2定义目标beads
+	int len1, len2;
+	len1 = str1.size();
+	len2 = str2.size();
+	int mat = 0;                     //mat定义匹配的个数
+	for (int i = 0; i < len2; i++)
+		for (int j = 0; j < len1; j++)
+		if (str2.substr(i, 1) == str1.substr(j, 1)){     //如果匹配，则在str1中删掉该字符，长度-1，mat+1,从头开始循环查找
+		    mat++;
+			len1--;
+			str1.erase(j, 1);
+			j = 0;
+			break;
+		}	
+	if (mat == len2)
+		cout << "Yes " << len1 << endl;
+	else
+		cout << "No " << len2 - mat << endl;
+}
+
