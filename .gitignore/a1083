@@ -1,0 +1,39 @@
+// pat1083.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"algorithm"
+using namespace std;
+
+const int N = 101;
+
+struct node{
+	string name;
+	string id;
+	int grade;
+}stu[N];
+
+void main(){
+	int n;                     //定义学生个数
+	cin >> n;
+	int base, top;            //定义符合要求的成绩范围
+	int gra[N];
+	int num=0;                //定义符合要求的学生数目
+	for (int i = 0; i < n; i++){
+		cin >> stu[i].name >> stu[i].id >> stu[i].grade;
+		gra[i] = stu[i].grade;
+	}
+	cin >> base >> top;
+	sort(gra, gra + n);
+	for (int j = n - 1; j >= 0 && gra[j] >= base && gra[j] <= top; j--)
+		for (int k = 0; k < n; k++)
+			if (gra[j] >= base && gra[j] <= top && stu[k].grade == gra[j]){
+				cout << stu[k].name << " " << stu[k].id << endl;
+				num++;
+				break;
+			}
+	if (num == 0)
+		cout << "NONE" << endl;
+}
