@@ -1,0 +1,44 @@
+// pata1084.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"algorithm"
+#include"vector"
+using namespace std;
+
+void main(){
+	string strori, strtout;
+	int lenori, lentout,lentem;
+	string des;                                                  //待输出的目标字符串
+	cin >> strori >> strtout;
+	lenori = strori.size();
+	lentout = strtout.size();
+	int temp = 0;                                                //temp定位typed-out string中的字符
+	for (int i = 0; i < lenori; i++){                            //将输入字符串中的小写字符全部转化为大写字母
+		if (strori[i] <= 'z' && strori[i] >= 'a')
+			strori[i] -= 32;
+	}
+	for (int i = 0; i < lentout; i++){                           //将输入字符串中的小写字符全部转化为大写字母
+		if (strtout[i] <= 'z' && strtout[i] >= 'a')
+			strtout[i] -= 32;
+	}
+	for (int i = 0; i < lenori; i++){
+		if (strori.substr(i, 1) == strtout.substr(temp, 1))      //进行匹配，如果相等，temp定位下一个字符
+			temp++;
+		else if (des == "")
+			des = strori[i];
+		else{
+			lentem = des.size();
+			int j = 0;
+			for (; j < lentem; j++)                                //对目标字符进行查重，如果尚未存入目标字符串则存入
+				if (des.substr(j, 1) == strori.substr(i, 1))
+					break;
+			if (j == lentem)
+				des += strori[i];
+		}
+	}
+	cout << des << endl;
+}
+
