@@ -1,0 +1,47 @@
+// pata1051.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"stack"
+using namespace std;
+
+const int N = 1000;
+
+int main(){
+	int m, n, k;
+	stack<int> st;
+	cin >> m >> n >> k;                       //m为栈的容量大小，n为入栈序列长度，k为行数
+	int des[N];                               //定义合理与否标记变量数组
+	for (int i = 0; i < k; i++){
+		int temp = 1;                         //入栈临时变量                    
+		int flag = 1;                         //定义合理与否标记变量
+		for (int j = 0; j < n; j++){
+			int input;
+			cin >> input; 
+			while (st.size() <= m ){
+				if (st.empty() || st.top() != input)
+					st.push(temp++);
+				else{
+					st.pop();
+					break;
+				}
+			}
+			if (st.size()>m){
+				flag = 0;
+			}	
+		}
+		des[i] = flag;
+		while (!st.empty())                              //将栈置空，pop出栈内元素等待下一次操作
+			st.pop();
+	}
+	for (int i = 0; i < k; i++){
+		if (des[i] == 1)
+			cout << "YES" << endl;
+		else
+			cout << "NO" << endl;
+	}
+	return 0; 
+	
+}
+
