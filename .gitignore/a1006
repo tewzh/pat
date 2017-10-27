@@ -1,0 +1,32 @@
+// pata1006.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+const int N = 100;
+
+void main(){
+	int n;
+	cin >> n;
+	string str[N][3];
+	int tempunlock=235959, templock=0;
+	for (int i = 0; i < n; i++){
+		cin >> str[i][0] >> str[i][1] >> str[i][2];
+		//提取时间，保存最小的时间和最大的时间
+		if (tempunlock > atoi((str[i][1].substr(0, 2) + str[i][1].substr(3, 2) + str[i][1].substr(6, 2)).c_str()))
+			tempunlock = atoi((str[i][1].substr(0, 2) + str[i][1].substr(3, 2) + str[i][1].substr(6, 2)).c_str());
+		if (templock < atoi((str[i][2].substr(0, 2) + str[i][2].substr(3, 2) + str[i][2].substr(6, 2)).c_str()))
+			templock = atoi((str[i][2].substr(0, 2) + str[i][2].substr(3, 2) + str[i][2].substr(6, 2)).c_str());
+	}
+	//输出最小时间和最大时间对应的学号
+	for (int i = 0; i < n; i++)
+		if (tempunlock == atoi((str[i][1].substr(0, 2) + str[i][1].substr(3, 2) + str[i][1].substr(6, 2)).c_str()))
+			cout << str[i][0] << " ";
+	for (int i = 0; i < n; i++)
+		if (templock == atoi((str[i][2].substr(0, 2) + str[i][2].substr(3, 2) + str[i][2].substr(6, 2)).c_str()))
+			cout << str[i][0] << endl;
+}
+
