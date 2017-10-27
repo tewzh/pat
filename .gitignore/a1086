@@ -1,0 +1,74 @@
+// pata1086.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"stack"
+using namespace std;
+
+const int N = 60;
+int n;
+int pre[N], in[N];
+
+struct node{
+	int data;
+	node *lchild, *rchild;
+};
+
+node* createTree(int preL,int preR,int inL,int inR){      //根据先序和中序序列来创建树
+	if (preL > preR)
+		return NULL;
+	node* root = new node;
+	root->data = pre[preL];
+	int temp;
+	for (int i = 0; i < n; i++)
+		if (pre[preL] == in[i])
+			temp = i;
+	root->lchild = createTree(preL + 1, preL + temp - inL, inL, temp - 1);
+	root->rchild = createTree(preL + temp - inL + 1, preR, temp + 1, inR);
+	return root;
+}
+
+int cnt = 1;                       //定义输出变量的个数
+void postOrder(node* root){        //后序遍历输出树的结构
+	if (root == NULL)
+		return;
+	postOrder(root->lchild);
+	postOrder(root->rchild);
+	if (cnt < n){                        //控制输出格式
+		cout << root->data << " ";
+		cnt++;
+	}	
+	else
+		cout << root->data << endl;
+}
+
+void main(){
+	cin>>n;
+	cin.ignore();           //清空缓冲区   fflush(stdin)
+	string str[N];         //由于最大为30个数，因此N最大应该为60行，否则会发生段错误
+	stack<int> st;
+	int countpre=0, countin=0;   //定义先序和中序标记
+	for (int i = 0; i < 2 * n; i++){                 //对输入的字符串进行提取，得到先序序列和中序序列
+		getline(cin,str[i]);
+		if (str[i].substr(0, 4) == "Push")
+			if (str[i].size() == 6){
+				pre[countpre] = atoi(str[i].substr(5, 1).c_str());
+				st.push(pre[countpre]);
+				countpre++;
+			}
+			else{
+				pre[countpre] = atoi(str[i].substr(5, 2).c_str());
+				st.push(pre[countpre]);
+				countpre++;
+			}
+		else{
+			in[countin++] = st.top();
+			st.pop();
+		}			
+	}
+	node* root = createTree(0,n-1,0,n-1);
+	postOrder(root);
+}
+
