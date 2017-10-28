@@ -1,0 +1,62 @@
+// pata1058.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+struct cur{
+	int Galleon;
+	int Sickle;
+	int Knut;
+};
+
+void main(){
+	string a, b;          //a、b定义两个输入的字符串
+	cin >> a >> b;
+	cur A, B, sum;
+	int ap1, ap2, bp1, bp2;         //ap1,ap2分别表示字符串a中两个.的位置,bp1,bp2分别表示字符串b中两个.的位置
+	for (int i = 0; i < a.size();i++)
+		if (a.substr(i, 1) == "."){
+			ap1 = i;
+			A.Galleon = atoi(a.substr(0, ap1).c_str());
+			break;
+		}
+	for (int i = ap1 + 1; i < a.size();i++)
+		if (a.substr(i, 1) == "."){
+			ap2 = i;
+			A.Sickle = atoi(a.substr(ap1 + 1, ap2 - ap1 - 1).c_str());
+			break;
+		}
+	A.Knut = atoi(a.substr(ap2 + 1, a.size() - ap2 - 1).c_str());
+	for (int i = 0; i < b.size(); i++)
+		if (b.substr(i, 1) == "."){
+			bp1 = i;
+			B.Galleon = atoi(b.substr(0, bp1).c_str());
+			break;
+		}
+	for (int i = bp1 + 1; i < b.size(); i++)
+		if (b.substr(i, 1) == "."){
+			bp2 = i;
+			B.Sickle = atoi(b.substr(bp1 + 1, bp2 - bp1 - 1).c_str());
+			break;
+		}
+	B.Knut = atoi(b.substr(bp2 + 1, b.size() - bp2 - 1).c_str());
+	sum.Galleon = sum.Sickle = sum.Knut = 0;
+	if (A.Knut + B.Knut >= 29){
+		sum.Knut = A.Knut + B.Knut - 29;
+		sum.Sickle += 1;
+	}
+	else
+		sum.Knut = A.Knut + B.Knut;
+	if (A.Sickle + B.Sickle >= 17){
+		sum.Sickle += A.Sickle + B.Sickle - 17;
+		sum.Galleon += 1;
+	}
+	else
+		sum.Sickle += A.Sickle + B.Sickle;
+	sum.Galleon += A.Galleon + B.Galleon;
+	cout << sum.Galleon << "." << sum.Sickle << "." << sum.Knut << endl;
+}
+
