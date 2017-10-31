@@ -1,0 +1,46 @@
+// pata1050.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"stdio.h"
+#include"string"
+using namespace std;
+
+//代码运行超时
+//void main(){
+//	string str1, str2, res="";
+//	getline(cin, str1);
+//	getline(cin, str2);
+//	int len1, len2;
+//	len1 = str1.size();
+//	len2 = str2.size();
+//	for (int i = 0; i < len1; i++){
+//		bool flag = false;
+//		for (int j = 0; j < len2; j++)
+//			if (str1.substr(i, 1) == str2.substr(j, 1)){
+//				flag = true;
+//				break;
+//			}	
+//		if (flag==false)
+//			res += str1[i];
+//	}
+//	cout << res << endl;
+//}
+
+void main(){
+	string str1, str2, res = "";
+	getline(cin, str1);
+	getline(cin, str2);
+	bool flag[256] = { false };
+	int len1, len2;
+	len1 = str1.size();
+	len2 = str2.size();
+	for (int i = 0; i < len2; i++)
+		flag[str2[i]] = true;
+	for (int j = 0; j < len1; j++)
+		if (!flag[str1[j]])
+			res += str1[j];
+	cout << res << endl;
+}
+
