@@ -1,0 +1,28 @@
+// pata1042.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+const int N = 21;
+
+void main(){
+	int times;
+	cin >> times;
+	int res[N][54];             //每次shuffling之后的结果
+	int order[54];              //given order
+	for (int i = 0; i < 54; i++){
+		res[0][i] = i + 1;
+		cin >> order[i];
+	}
+	string resini[54] = { "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "H11", "H12", "H13", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13", "J1", "J2"};
+	for (int i = 0; i < times; i++)
+		for (int j = 0; j < 54; j++)
+			res[i + 1][order[j]-1] = res[i][j];
+	for (int i = 0; i < 53; i++)
+		cout << resini[res[times][i]-1] << " ";
+	cout << resini[res[times][53] - 1] << endl;      //控制输出格式
+}
+
