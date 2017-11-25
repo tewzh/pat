@@ -1,0 +1,24 @@
+#include"iostream"
+#include"cstdio"
+#include"map"
+using namespace std;
+
+
+int main(){
+  int m, n, x;
+  scanf("%d%d", &m, &n);     //输入必须要用scanf,用cin在第二个测试点会运行超时
+  map<int, int> M;
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < m; j++){
+    scanf("%d", &x);  
+    M[x]++;
+    }
+  int max = 0,res;
+  for (map<int, int>::iterator iter = M.begin(); iter != M.end();++iter)
+    if (iter->second > max){
+    max = iter->second;
+    res = iter->first;
+    }
+  printf("%d\n", res);  
+  return 0;
+}
