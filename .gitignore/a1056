@@ -1,0 +1,47 @@
+// pata1056.cpp : 定义控制台应用程序的入口点。
+//
+
+
+#include "stdafx.h"
+#include"iostream"
+#include"map"
+#include"queue"
+using namespace std;
+
+const int NP = 1000;
+
+int main(){
+	int np, ng;
+	cin >> np >> ng;
+	int weight[NP], iniord[NP];
+	queue<int> q;
+	for (int i = 0; i < np; i++)
+		cin >> weight[i];
+	for (int i = 0; i < np; i++){
+		cin >> iniord[i];
+		q.push(weight[iniord[i]]);
+	}
+	queue<int> tmpq;
+	map<int, int> m;
+	while (q.size() != 1){
+		int k = q.size();
+		for (int i = 0; i < k / ng + 1; i++){
+			int max = q.front();
+			for (int j = 0; j < ((i == k / ng) ? (k - i*ng) : ng); j++){
+				m[q.front()] = k / ng + 2;
+				if (max <= q.front())
+					max = q.front();
+				q.pop();
+			}
+			tmpq.push(max);
+		}
+		q = tmpq;
+		tmpq = queue<int>();
+	}
+	m[q.front()] = 1;
+	for (int i = 0; i < np - 1; i++)
+		cout << m[weight[i]] << " ";
+	cout << m[weight[np - 1]] << endl;
+	return 0;
+}
+
