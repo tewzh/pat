@@ -1,0 +1,59 @@
+// pata1094.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"vector"
+#include"algorithm"
+using namespace std;
+
+const int N = 100;
+int n, m;
+
+struct node{             //定义结点的数据结构
+	int data;
+	int layer;
+	int childnum;
+	int child[N];
+}Node[N];
+
+node createTree(int index,int layer){                //建树
+	Node[index].data = index;
+	Node[index].layer = layer;
+	for (int i = 0; i < Node[index].childnum; i++)
+		createTree(Node[index].child[i],layer+1);
+	return Node[N];
+}
+
+int main(){
+	cin >> n >> m;
+	for (int i = 0; i < m;i++){
+		int temp;
+		cin >> temp;
+		cin >> Node[temp].childnum;
+		for (int j = 0; j < Node[temp].childnum; j++)
+			cin >> Node[temp].child[j];
+	}
+	createTree(1,1);
+	int maxlayer = 1;
+	int count[N] = { 0 };
+	int tempcount[N] = { 0 };
+	for (int i = 1; i <= n; i++){              //统计每个层次中的结点数目，并确定最大层数
+		count[Node[i].layer]++;
+		if (maxlayer < Node[i].layer)
+			maxlayer = Node[i].layer;
+	}	
+	for (int i = 1; i <= maxlayer; i++)
+		tempcount[i] = count[i];
+	sort(count+1, count + maxlayer+1);        //各层结点数目排序
+	int reslayer;
+	for (int i = 1; i <= maxlayer; i++){
+		if (tempcount[i] == count[maxlayer]){
+			reslayer = i;
+			break;
+		}	
+	}
+	cout << count[maxlayer] << " " << reslayer << endl;      //输出最大的generation和所在的层数
+	return 0;
+}
+
