@@ -1,0 +1,49 @@
+// pata1037.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"algorithm"
+using namespace std;
+
+const int N = 100001;
+
+bool compare(int a, int b){
+	return a > b;
+}
+
+int main(){
+	int nc, np;
+	int a[N], b[N];
+	cin >> nc;
+	for (int i = 0; i < nc; i++)
+		cin >> a[i];
+	cin >> np;
+	for (int i = 0; i < np; i++)
+		cin >> b[i];
+	sort(a, a + nc);                  //升序排序
+	sort(b, b + np);
+	int afirstpos, bfirstpos;
+	for (int i = 0; i < nc; i++)
+		if (a[i] > 0){
+			afirstpos = i;
+			break;
+		}
+	for (int i = 0; i < np; i++)
+		if (b[i] > 0){
+			bfirstpos = i;
+			break;
+		}
+	int minpos = (afirstpos >= bfirstpos ? bfirstpos : afirstpos);
+	int sum = 0;
+	for (int i = 0; i < minpos; i++)       //累加两数均为负，乘积为正的和
+		sum += a[i] * b[i];
+	sort(a, a + nc,compare);               //降序排序
+	sort(b, b + np,compare);
+	int minegpos = ((nc - afirstpos) >= (np - bfirstpos) ? (np - bfirstpos) : (nc - afirstpos));
+	for (int i = 0; i < minegpos; i++)     //累加两数均为正的乘积的和
+		sum += a[i] * b[i];
+	cout << sum << endl;
+	return 0;
+}
+
