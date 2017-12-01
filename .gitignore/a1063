@@ -1,0 +1,96 @@
+// pata1063.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+//#include"iostream"
+//#include"iomanip"
+//using namespace std;
+//
+//const int N = 50;
+//const int M = 1001;
+//const int K = 2000;
+//
+//int main(){
+//	int s[N][M];
+//	int n;
+//	cin >> n;
+//	for (int i = 0; i < n; i++){
+//		cin >> s[i][0];
+//		for (int j = 1; j <= s[i][0]; j++)
+//			cin >> s[i][j];
+//	}
+//	int k;
+//	int q[K][2];
+//	cin >> k;
+//	for (int i = 0; i < k; i++)
+//		cin >> q[i][0] >> q[i][1];
+//	for (int i = 0; i < k; i++){
+//		int nc = 0, nt = 0;
+//		for (int j = 1; j <= s[q[i][0] - 1][0]; j++){
+//			for (int p = 1; p <= s[q[i][1] - 1][0]; p++)
+//				if (s[q[i][0] - 1][j] == s[q[i][1] - 1][p]){
+//				nc++;
+//				break;
+//				}
+//		}
+//		int counta = 0, countb = 0;
+//		for (int j = 1; j <= s[q[i][0] - 1][0]; j++){
+//			for (int p = j + 1; p <= s[q[i][0] - 1][0]; p++)
+//				if (s[q[i][0] - 1][j] == s[q[i][0] - 1][p])
+//					counta++;
+//		}
+//		for (int j = 1; j <= s[q[i][1] - 1][0]; j++){
+//			for (int p = j + 1; p <= s[q[i][1] - 1][0]; p++)
+//				if (s[q[i][1] - 1][j] == s[q[i][1] - 1][p])
+//					countb++;
+//		}
+//		nt = s[q[i][0] - 1][0] + s[q[i][1] - 1][0] - counta - countb - nc;
+//		cout << fixed << setprecision(1) << (double)(nc * 100) / (double)nt << "%" << endl;
+//	}
+//	return 0;
+//}
+
+#include"iostream"
+#include"set"               //set是一个内部自动有序且不含重复元素的容器
+#include"algorithm"
+#include"iterator"
+#include"iomanip"
+using namespace std;
+
+const int N = 50;
+const int M = 10000;
+const int K = 2000;
+
+int main(){
+	set<int> a[N];
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++){
+		int temp;
+		cin >> temp;
+		int tmp[M];
+		for (int j = 0; j < temp; j++){    //将每行输入的元素加入到set容器中
+			cin >> tmp[j];
+			a[i].insert(tmp[j]);
+		}	
+	}
+	int k;
+	cin >> k;
+	int s[K][2];
+	for (int i = 0; i < k; i++)
+		cin >> s[i][0] >> s[i][1];
+	int nc, nt;
+	for (int i = 0; i < k; i++){
+		set<int> res1, res2;
+		//set_union(a[s[i][0] - 1].begin(), a[s[i][0] - 1].end(), a[s[i][1] - 1].begin(), a[s[i][1] - 1].end(),inserter(res1,res1.begin()));
+		//求这两个set容器的交集，根据交集个数来求并集个数
+		//如果直接求并集再进行相关计算的话，第4个测试用例会出现运行超时的问题
+		set_intersection(a[s[i][0] - 1].begin(), a[s[i][0] - 1].end(), a[s[i][1] - 1].begin(), a[s[i][1] - 1].end(), inserter(res2, res2.begin()));
+		//nt = res1.size();
+		nc = res2.size();
+		nt = a[s[i][0] - 1].size() + a[s[i][1] - 1].size() - nc;
+		cout << fixed << setprecision(1) << (double)(nc * 100) / (double)nt << "%" << endl;
+	}
+	return 0;
+}
+
