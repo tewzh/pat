@@ -1,0 +1,51 @@
+// pata1093.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+const int N = 100005;
+
+int main(){
+	string str;
+	cin >> str;
+	int len = str.size();
+	int count = 0;
+	//for (int i = 0; i < len; i++){                  //蛮力法求解运行超时
+	//	if (str.substr(i, 1) == "P"){
+	//		for (int j = i + 1; j < len; j++){
+	//			if (str.substr(j, 1) == "A"){
+	//				for (int k = j + 1; k < len; k++){
+	//					if (str.substr(k, 1) == "T"){
+	//						count++;
+	//					}		
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	int s[N][2], index = 0;
+	int pcount = 0, tcount = 0;
+	for (int i = 0; i < len; i++){          //统计每个A前面有多少个P
+		if (str.substr(i, 1) == "A")
+			s[index++][0] = pcount;
+		if (str.substr(i, 1) == "P")
+			pcount++;
+	}
+	int acount = index;
+	for (int i = len - 1; i >= 0; i--){    //统计每个A的后面有多少个T
+		if (str.substr(i, 1) == "A")
+			s[--index][1] = tcount;
+		if (str.substr(i, 1) == "T")
+			tcount++;
+	}
+	for (int i = 0; i < acount; i++){      //结果累加
+		count += s[i][0] * s[i][1];
+		count %= 1000000007;
+	}
+	cout << count << endl;
+	return 0;
+}
+
