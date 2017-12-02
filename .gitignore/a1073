@@ -1,0 +1,35 @@
+// pata1073.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+int main(){
+	string str;
+	cin >> str;
+	int len = str.size();
+	int epos = str.find("E");     //确定E的位置
+	int m = atoi(str.substr(epos + 2, len - epos - 2).c_str());   //确定幂的次数
+	string res = str.substr(1, 1) + str.substr(3, epos - 3);
+	if (str.substr(epos + 1, 1) == "+"){
+		for (int i = 0; i < m - epos + 3; i++){            //分别为正数次幂和负数次幂的输出情况
+			res += "0";
+		}
+	}
+	else{
+		string ztmp="0.";
+		for (int i = 0; i < m - 1; i++){
+			ztmp += "0";
+		}
+		res = ztmp + res;
+	}
+	if (str.substr(0, 1) == "+")            //分别为正数和负数时的输出情况
+		cout << res << endl;
+	else
+		cout << "-" << res << endl;
+	return 0;
+
+}
+
