@@ -1,0 +1,35 @@
+// pata.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"map"
+using namespace std;
+
+int main(){
+	string str;
+	cin >> str;
+	int len = str.size();
+	int sum = 0;
+	for (int i = 0; i < len; i++)               //累加求和
+		sum += atoi(str.substr(i, 1).c_str());   //将string类型转化为int类型atoi()、c_str()函数
+	map<string, string> p;                //建立map映射
+	p["0"] = "zero";
+	p["1"] = "one";
+	p["2"] = "two";
+	p["3"] = "three";
+	p["4"] = "four";
+	p["5"] = "five";
+	p["6"] = "six";
+	p["7"] = "seven";
+	p["8"] = "eight";
+	p["9"] = "nine";
+	string ssum=to_string(sum);             //将和转化为string类型，方便计算位数和得到key
+	int sumlen = ssum.size();
+	for (int i = 0; i < sumlen - 1; i++)
+		cout << p[ssum.substr(i, 1)] << " ";
+	cout << p[ssum.substr(sumlen - 1, 1)] << endl;
+	return 0;
+}
+
