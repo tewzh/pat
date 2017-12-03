@@ -1,0 +1,33 @@
+// pata1041.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"map"
+using namespace std;
+
+const int N = 100001;
+
+int main(){
+	int n;
+	cin >> n;
+	int a[N];              //建立输入数组a
+	map<int, int> p;
+	for (int i = 0; i < n; i++){    //统计数组中每个distinct数出现次数
+		cin >> a[i];
+		p[a[i]]++;
+	}
+	int count=0;
+	for (int i = 0; i < n;i++)         //输出首个unique数
+		if (p[a[i]] == 1){
+			cout << a[i] << endl;
+			break;
+		}
+		else
+			count++;
+	if (count == n)                 //如果所有数均为非unique，输出none
+		cout << "None" << endl;
+	return 0;
+
+}
+
