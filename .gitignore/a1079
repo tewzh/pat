@@ -1,0 +1,61 @@
+// pata1079.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"vector"
+#include"iomanip"
+#include"algorithm"
+using namespace std;
+
+const int N = 100005;
+
+struct node{
+	int data;
+	int layer;
+	int retailernum;
+	vector<int> child;
+}Node[N];
+
+node CreateTree(int root, int layer){
+	Node[root].layer = layer;
+	for (int i = 0; i < Node[root].child.size(); i++)
+		CreateTree(Node[root].child[i], layer + 1);
+	return Node[N];
+}
+
+int main(){
+	int n;
+	double p, r;
+	cin >> n >> p >> r;
+	for (int i = 0; i < n; i++){
+		int count;
+		cin >> count;
+		Node[i].data = i;
+		if (count == 0){
+			int rnum;
+			cin >> rnum;
+			Node[i].retailernum = rnum;
+		}
+		else{
+			for (int j = 0; j < count; j++){
+				int temp;
+				cin >> temp;
+				Node[i].child.push_back(temp);
+			}
+		}	
+	}
+	CreateTree(0, 0);
+	double res = 0;
+	for (int i = 0; i < n; i++){
+		if (Node[i].child.size() == 0){
+			res += p*Node[i].retailernum*pow((1 + (double)(r / 100)), Node[i].layer);
+		}
+	}
+	cout << fixed << setprecision(1) << (double)(res * 100 + 5) / 100 << endl;
+	return 0;
+}
+
+
+
+
