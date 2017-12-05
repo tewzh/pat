@@ -1,0 +1,93 @@
+// pata1066.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+using namespace std;
+
+struct node{
+	int data;
+	int height;
+	node *lchild, *rchild;
+};
+
+int getHeight(node* root){                    //获取树的高度
+	if (root == NULL)
+		return 0;
+	return root->height;
+}
+
+void updateHeight(node* root){                 //更新树的高度
+	root->height = ((getHeight(root->lchild) > getHeight(root->rchild)) ? getHeight(root->lchild) : getHeight(root->rchild)) + 1;
+}
+
+int getBalanceFactor(node* root){              //计算平衡因子
+	return getHeight(root->lchild) - getHeight(root->rchild);
+}
+
+void L(node* &root){                         //左旋
+	node* temp = root->rchild;
+	root->rchild = temp->lchild;
+	temp->lchild = root;
+	updateHeight(root);
+	updateHeight(temp);
+	root = temp;
+}
+
+void R(node* &root){                      //右旋
+	node* temp = root->lchild;
+	root->lchild = temp->rchild;
+	temp->rchild = root;
+	updateHeight(root);
+	updateHeight(temp);
+	root = temp;
+}
+
+void insert(node* &root, int v){              //插入节点，建立平衡二叉树
+	if (root == NULL){
+		root = new node;
+		root->data = v;
+		root->height = 1;
+		root->lchild = root->rchild = NULL;
+		return;
+	}
+	if (v < root->data){
+		insert(root->lchild, v);
+		updateHeight(root);
+		if (getBalanceFactor(root) == 2){
+			if (getBalanceFactor(root->lchild) == 1)              //LL型，右旋
+				R(root);
+			else if (getBalanceFactor(root->lchild) == -1){       //LR型，先左旋，后右旋
+				L(root->lchild);
+				R(root);
+			}
+		}
+	}
+	else{
+		insert(root->rchild, v);
+		updateHeight(root);
+		if (getBalanceFactor(root) == -2){
+			if (getBalanceFactor(root->rchild) == 1){            //RL型，先右旋，后左旋
+				R(root->rchild);
+				L(root);
+			}
+			else if (getBalanceFactor(root->rchild) == -1){      //RR型，左旋
+				L(root);
+			}
+		}
+	}
+}
+
+int main(){
+	int n;
+	cin >> n;
+	int data;
+	node* root = NULL;
+	for (int i = 0; i < n; i++){            //建树
+		cin >> data;
+		insert(root, data);
+	}
+	cout << root->data<<endl;
+	return 0;
+}
+
