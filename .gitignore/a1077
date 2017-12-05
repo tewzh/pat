@@ -1,0 +1,39 @@
+// pata1077.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+const int N = 100;
+
+int main(){
+	int n;
+	cin >> n;
+	string str[N];
+	cin.ignore();                   //忽略前面的的换行符输入，否则无法读取str[0]的输入
+	for (int i = 0; i < n; i++)
+		getline(cin,str[i]);          //用getline()接收，可以接收空格的输入
+	string res,temp;
+	for (int i = 0; i < str[0].size(); i++){
+		temp = str[0].substr(str[0].size() - 1 - i, 1);
+		int j;
+		for (j = 1; j < n; j++){
+			if (temp != str[j].substr(str[j].size() - 1 - i, 1)){
+				goto breakLoop;                 //采取goto退出所有循环的策略，用break的话会发生substr()函数内存读取越界
+			}
+		}
+		if (j == n)
+			res += temp;
+	}
+	breakLoop:if(res == "")
+		cout << "nai" << endl;
+	else{
+		for (int i = 0; i < res.size(); i++)
+			cout << res.substr(res.size() - 1 - i, 1);
+		cout << endl;
+	}
+	
+	return 0;
+}
