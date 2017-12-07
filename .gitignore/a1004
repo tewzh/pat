@@ -1,0 +1,56 @@
+// pata1004.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"vector"
+#include"map"
+using namespace std;
+
+const int N = 100;
+
+struct node{               //定义结构体，包含数据域，层数和孩子的vector
+	int data;
+	int layer;
+	vector<int> child;
+}Node[N];
+
+node CreateTree(int index, int layer){        //递归建树
+	Node[index].data = index;
+	Node[index].layer = layer;
+	for (int i = 0; i < Node[index].child.size(); i++)
+		CreateTree(Node[index].child[i], layer + 1);
+	return Node[N];
+}
+
+int main(){
+	int n, m;
+	cin >> n >> m;
+	for (int i = 1; i <= m; i++){        //输入非叶子结点的信息
+		int tmpdata;
+		cin >> tmpdata;                 //非叶子结点的data域
+		Node[tmpdata].data = tmpdata;
+		int k;
+		cin >> k;
+		for (int j = 0; j < k; j++){     //依次输入非叶子结点的儿子
+			int temp;
+			cin >> temp;
+			Node[tmpdata].child.push_back(temp);
+		}
+	}
+	CreateTree(1, 1);
+	map<int, int> mp;
+	int maxlayer = 1;
+	for (int i = 1; i <= n; i++){            //计算最大层数和各层中叶子结点的数目
+		if (Node[i].layer > maxlayer)
+			maxlayer = Node[i].layer;
+		if (Node[i].child.size() == 0 && Node[i].data != 0)
+			mp[Node[i].layer]++;
+			
+	}
+	for (int i = 1; i < maxlayer ; i++)   //按照格式输出
+		cout << mp[i] << " ";
+	cout << mp[maxlayer] << endl;
+	return 0;
+}
+
