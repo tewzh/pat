@@ -1,0 +1,56 @@
+// pata1023.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"algorithm"
+using namespace std;
+
+const int N = 25;
+
+bool compare(int a, int b){
+	return a > b;
+}
+
+int main(){
+	string str1, str2;
+	int a[N], b[N];
+	cin >> str1;
+	int next = 0;
+	for (int i = str1.size() - 1; i >= 0; i--){        //大数相加算法，按位计算
+		int temp;
+		temp = atoi(str1.substr(i, 1).c_str()) * 2 + next;
+		if (temp < 10){                           //大于10则进一
+			str2 = to_string(temp) + str2;
+			next = 0;
+		}	
+		else if(i!=0){
+			str2 = to_string(temp % 10) + str2;
+			next = 1;
+		}
+		else{
+			str2 = "1" + to_string(temp % 10) + str2;
+		}
+	}
+	for (int i = 0; i < str1.size(); i++)       //将各位数保存到数组中
+		a[i] = atoi(str1.substr(i, 1).c_str());
+	for (int i = 0; i < str2.size(); i++)
+		b[i] = atoi(str2.substr(i, 1).c_str());
+	sort(a, a + str1.size(), compare);       //从小到大进行排序
+	sort(b, b + str2.size(), compare);
+	int k;
+	for (k = 0; k < max(str1.size(), str2.size()); k++){   //排序后的数逐位进行比较
+		if (a[k] != b[k]){
+			cout << "No" << endl;
+			cout << str2 << endl;
+			break;
+		}
+	}
+	if (k == max(str1.size(), str2.size())){
+		cout << "Yes" << endl;
+		cout << str2 << endl;
+	}
+	return 0;
+}
+
