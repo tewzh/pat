@@ -1,0 +1,50 @@
+// pata1059.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"vector"
+#include"map"
+#include"algorithm"
+#include"string"
+using namespace std;
+
+int main(){
+	int n;
+	cin >> n;
+	vector<int> vi;
+	string res = to_string(n) + "=";
+	while (n != 1){             //遍历查找质因子并加入到vector中
+		if (n % 2 == 0){
+			vi.push_back(2);
+			n /= 2;
+		}
+		else{
+			int k;
+			for (k = 3; k <= sqrt(n); k += 2){
+				if (n%k == 0){
+					vi.push_back(k);
+					n /= k;
+					break;
+				}	
+			}
+			if (k == n || k> sqrt(n)){
+				vi.push_back(n);
+				break;
+			}		
+		}					
+	}
+	map<int, int> mp;
+	for (int i = 0; i < vi.size();i++)              //质因子的个数
+		mp[vi[i]]++;
+	for (map<int, int>::iterator it = mp.begin(); it != mp.end(); it++) //调整输出格式
+		if (it->second != 1)
+			res += to_string(it->first) + "^" + to_string(it->second) + "*";
+		else
+			res += to_string(it->first) + "*";
+	if (res == "1=")                       //当输入为1这个特例情况时
+		cout << "1=1" << endl;
+	else
+		cout << res.substr(0, res.size() - 1) << endl;
+	return 0;
+}
