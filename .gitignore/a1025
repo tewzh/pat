@@ -1,0 +1,62 @@
+// pata1025.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"algorithm"
+#include"map"
+using namespace std;
+
+const int N = 30000;
+
+struct node{     //定义学生成绩排名的结构体，id为学号，score为分数，localrank为考场排名，finalrank为本场考试排名，local为考场号
+	string id;
+	int score;
+	int localrank;
+	int finalrank;
+	int locnum;
+}Node[N];
+
+bool compare(node a, node b){   //compare函数
+	if (a.score == b.score)
+		return a.id < b.id;
+	else
+		return a.score > b.score;
+}
+
+int main(){
+	int n;
+	cin >> n;
+	int count = 0;
+	for (int i = 0; i < n; i++){
+		int k;
+		cin >> k;
+		for (int j = 0; j < k; j++){    //输入每个考场的学生id和分数，及考场号
+			cin >> Node[count + j].id >> Node[count + j].score;
+			Node[count + j].locnum = i + 1;
+		}	
+		sort(Node + count, Node + count + k, compare);   //对该考场的所有学生排序
+		Node[count].localrank = 1;
+		for (int j = 1; j < k; j++){           //根据排序对该考场的学生的考场成绩顺序进行赋值
+			if (Node[count + j].score == Node[count - 1 + j].score)  //解决分数相等时的排名问题
+				Node[count + j].localrank = Node[count - 1 + j].localrank;
+			else
+				Node[count + j].localrank = j + 1;
+		}
+		count += k;
+	}
+	cout << count << endl;
+	sort(Node, Node + count, compare);    //对本次考试的所有学生进行排序
+	Node[0].finalrank = 1;
+	for (int i = 1; i < count; i++){       //根据排序对本次考试的所有学生成绩顺序进行赋值
+		if (Node[i].score == Node[i - 1].score)       //解决分数相等时的排名问题
+			Node[i].finalrank = Node[i - 1].finalrank;
+		else
+			Node[i].finalrank = i + 1;
+	}	
+	for (int i = 0; i < count; i++)       //按照要求输出结果
+		cout << Node[i].id << " " << Node[i].finalrank << " " << Node[i].locnum << " " << Node[i].localrank << endl;
+	return 0;
+}
+
