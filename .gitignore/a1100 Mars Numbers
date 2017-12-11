@@ -1,0 +1,107 @@
+// pata1100.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"vector"
+using namespace std;
+
+string tomars(int a){            //将10进制数转化为13进制
+	string res="";
+	if (a == 0)
+		return "0";
+	else{
+		while (a != 0){
+			if (a % 13 == 10)
+				res = "A" + res;
+			else if (a % 13 == 11)
+				res = "B" + res;
+			else if (a % 13 == 12)
+				res = "C" + res;
+			else
+				res = to_string(a % 13) + res;
+			a /= 13;
+		}
+		return res;
+	}
+}
+
+int main(){
+	int n;
+	cin >> n;
+	cin.ignore();
+	string a[13] = { "tret", "jan", "feb", "mar", "apr", "may", "jun", "jly", "aug", "sep", "oct", "nov", "dec" };
+	string b[13] = { "tret", "tam", "hel", "maa", "huh", "tou", "kes", "hei", "elo", "syy", "lok", "mer", "jou" };
+	for (int i = 0; i < n; i++){
+		string strtemp;
+		getline(cin, strtemp);
+		//首先确定该数是火星数还是地球数，若是火星数，则将该字符串提取解析得到数字然后将该数字转化为10进制
+		//若为地球数，则将十进制转化为十三进制，并映射成相应的字符串
+		if (strtemp.substr(0, 1) <= "9" && strtemp.substr(0, 1) >= "0"){   
+			string restemp,res;
+			restemp = tomars(atoi(strtemp.c_str()));
+			//判断火星数是一位数还是二位数
+			if (restemp.size() == 2){
+				//确定特例情况ABC
+				if (restemp.substr(0, 1) == "A")
+					res = b[10] + " ";
+				else if (restemp.substr(0, 1) == "B")
+					res = b[11] + " ";
+				else if (restemp.substr(0, 1) == "C")
+					res = b[12] + " ";
+				else
+					res = b[atoi(restemp.substr(0, 1).c_str())] + " ";
+				if (restemp.substr(1, 1) == "A")
+					res += a[10];
+				else if (restemp.substr(1, 1) == "B")
+					res += a[11];
+				else if (restemp.substr(1, 1) == "C")
+					res += a[12];
+				else if (restemp.substr(1, 1) == "0")
+					res += "";
+				else
+					res += a[atoi(restemp.substr(1, 1).c_str())];
+			}
+			else{
+				if (restemp.substr(0, 1) == "A")
+					res = a[10];
+				else if (restemp.substr(0, 1) == "B")
+					res = a[11];
+				else if (restemp.substr(0, 1) == "C")
+					res = a[12];
+				else
+					res = a[atoi(restemp.substr(0, 1).c_str())];
+			}
+			cout << res << endl;
+		}
+		else{
+			int resin;
+			//将十三进制转化为十进制
+			for (int j = 0; j < 13; j++){
+				if (strtemp.substr(0, 3) == b[j]){
+					resin = j * 13;
+					break;
+				}
+				else if (strtemp.substr(0, 4) == a[0]){
+					resin = 0;
+					break;
+				}
+				else if (strtemp.substr(0, 3) == a[j]){
+					resin = j;
+					break;
+				}
+			}
+			if (strtemp.size() == 7){
+				for (int j = 0; j < 13; j++){
+					if (strtemp.substr(4, 3) == a[j]){
+						resin += j;
+					}
+
+				}
+			}
+			cout << resin << endl;
+		}
+	}
+	return 0;
+}
