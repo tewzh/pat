@@ -1,0 +1,42 @@
+// pata1046.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"algorithm"
+#include"vector"
+using namespace std;
+
+/*降低时间复杂度，其他方法会运行超时*/
+
+int main(){
+	int n;
+	cin >> n;
+	int *dis = new int[n + 1];
+	int sum = 0;
+	int d;
+	//对输入结果进行累加，计算环形的总距离，同时计算各个结点到第一个结点的距离
+	for (int i = 0; i < n; i++){
+		cin >> d;
+		sum += d;
+		dis[i] = sum;
+	}
+	int m;
+	cin >> m;
+	vector<int> vi;
+	for (int i = 0; i < m; i++){
+		int pa, pb;
+		cin >> pa >> pb;
+		int mindis = 0;
+		if (min(pa, pb) == 1)
+			mindis = dis[max(pa, pb) - 2];
+		else           //结点pb到结点1的距离减去结点pa到结点1的距离
+			mindis = dis[max(pa, pb) - 2] - dis[min(pa, pb) - 2];
+		if (mindis > sum - mindis)
+			mindis = sum - mindis;
+		vi.push_back(mindis);
+	}
+	for (int i = 0; i < vi.size(); i++)
+		cout << vi[i] << endl;
+	return 0;
+}
