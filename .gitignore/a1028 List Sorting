@@ -1,0 +1,74 @@
+// pata1028.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"stdio.h"
+#include"string.h"
+#include"algorithm"
+using namespace std;
+
+const int N = 100005;
+
+struct node{
+	char id[10];
+	char name[20];
+	int grade;
+}Node[N];
+
+bool compare1(node a, node b){
+	return strcmp(a.id, b.id) <= 0;
+}
+
+bool compare2(node a, node b){
+	if (strcmp(a.name, b.name) == 0)
+		return strcmp(a.id, b.id) <= 0;
+	else
+		return strcmp(a.name, b.name) <= 0;
+}
+
+bool compare3(node a, node b){
+	if (a.grade == b.grade)
+		return strcmp(a.id, b.id) <= 0;
+	else
+		return a.grade < b.grade;
+}
+
+
+/*此题使用cin输入的话最后一个测试用例会超时，改用scanf的话最后一个测试用例95ms通过
+字符数组char[]比较时不能直接比较，必须使用strcmp函数，同时在g++编译器中要带上头文件"#include<string.h>"
+return strcmp(a.id, b.id) <= 0   或者为true、false
+scanf进行输入时，int类型的要用&n，char类型则直接id*/
+
+/*为什么cin,cout会超时而scanf,printf不超时？
+C++中为了支持cout/cin和printf/scanf混用，cout/cin每一个IO操作完成后都会将内部缓冲区和printf/scanf缓冲区同步
+会消耗大量的时间
+当输入数据量千万级以上时，差距非常大，超过一个数量级*/
+
+int main(){
+	int n, c;
+	/*cin >> n >> c;*/
+	scanf("%d %d", &n, &c);
+	for (int i = 0; i < n; i++)
+		/*cin >> Node[i].id >> Node[i].name >> Node[i].grade;*/
+		scanf("%s %s %d", Node[i].id, Node[i].name, &Node[i].grade);
+	if (c == 1){
+		sort(Node, Node + n, compare1);
+		for (int j = 0; j < n; j++)
+			//cout << Node[j].id << " " << Node[j].name << " " << Node[j].grade << endl;
+			printf("%s %s %d\n", Node[j].id, Node[j].name, Node[j].grade);
+	}
+	else if (c == 2){
+		sort(Node, Node + n, compare2);
+		for (int j = 0; j < n; j++)
+			//cout << Node[j].id << " " << Node[j].name << " " << Node[j].grade << endl;
+			printf("%s %s %d\n", Node[j].id, Node[j].name, Node[j].grade);
+	}
+	else{
+		sort(Node, Node + n, compare3);
+		for (int j = 0; j < n; j++)
+			/*cout << Node[j].id << " " << Node[j].name << " " << Node[j].grade << endl;*/
+			printf("%s %s %d\n", Node[j].id, Node[j].name, Node[j].grade);
+	}
+	return 0;
+}
+
