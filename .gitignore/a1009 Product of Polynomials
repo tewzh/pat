@@ -1,0 +1,56 @@
+// pata1009.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"algorithm"
+#include"iomanip"
+using namespace std;
+
+struct node{
+	int n;
+	double an;
+};
+
+node a[100], b[100], c[2001];
+
+/*node c至少要大于2000，否则会发生数组越界问题
+第一个测试点始终没法通过，由于小数点后几位取舍的问题*/
+
+int main(){
+	int firstk, secondk;
+	cin >> firstk;
+	/*scanf("%d", &firstk);*/
+	for (int i = 0; i < firstk; i++)
+		cin >> a[i].n >> a[i].an;
+		/*scanf("%d %lf", &a[i].n, &a[i].an);*/
+	cin >> secondk;
+	for (int i = 0; i < secondk; i++)
+		cin >> b[i].n >> b[i].an;
+		/*scanf("%d %lf", &b[i].n, &b[i].an);*/
+	int count = 0;             //对c中的个数进行计数
+	for (int i = 0; i < firstk; i++){    //每项都要进行相乘后合并
+		for (int j = 0; j < secondk; j++){
+			if (c[a[i].n + b[j].n].n == NULL)
+				count++;
+			c[a[i].n + b[j].n].n += a[i].n + b[j].n ;
+			c[a[i].n + b[j].n].an += a[i].an*b[j].an;
+		}
+	}
+	cout << count << " ";
+	for (int i = 2000; i >= 0; i--)
+		if (c[i].an != NULL){
+		if (count > 1){
+			cout << i  << " " << fixed << setprecision(1) << c[i].an << " ";
+			/*printf("%d %.1lf ", i, c[i].an);*/
+			count--;
+		}
+		else
+			cout << i  << " " << fixed << setprecision(1) << c[i].an << endl;
+			/*printf("%d %.1lf", i, c[i].an);*/
+		}
+		
+	
+	return 0;
+
+}
