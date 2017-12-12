@@ -1,0 +1,41 @@
+// pata1048.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"stdio.h"
+#include"algorithm"
+using namespace std;
+
+#define N 100005
+
+/*降低时间复杂度，通过数组保存每个数出现的次数
+最大为m时，判断m-i是否存在*/
+
+
+int main(){
+	int n, m;
+	scanf("%d %d", &n, &m);
+	int a[N] = {0};
+	for (int i = 0; i < n; i++){
+		int temp;
+		scanf("%d", &temp);
+		a[temp]++;
+	}
+	int j;
+	for (j = 0; j < m; j++){
+		if (a[j]>0){
+			a[j]--;
+			if (a[m - j] > 0){
+				printf("%d %d\n", j, m - j);
+				break;
+			}
+				
+
+		}
+	}
+	if (j == m)
+		printf("No Solution\n");
+	return 0;
+
+}
