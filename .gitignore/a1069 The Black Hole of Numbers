@@ -1,0 +1,49 @@
+// pata1069.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"algorithm"
+using namespace std;
+
+bool compare(int a, int b){
+	return a > b;
+}
+
+int main(){
+	string n;
+	cin >> n;
+	while (n != "6174"){
+		//如果输入的数不是四位数，则补0补齐至四位
+		for (int i = 0; i < 4 - n.size(); i++){
+			n = "0" + n;
+		}
+		int temp[4];    //存放该四位数的各个位数数字
+		for (int i = 0; i < 4; i++)
+			temp[i] = atoi(n.substr(i, 1).c_str());
+
+		if (temp[0] == temp[1] && temp[0] == temp[2] && temp[0] == temp[3]){
+			cout << n << " - " << n << " = 0000" << endl;
+			break;
+		}	
+		else{
+			string astr, bstr;   //分别为降序排序数和升序排序数
+
+			sort(temp, temp + 4, compare);   //降序排序
+			for (int i = 0; i < 4; i++)      //获得降序排序数
+				astr += to_string(temp[i]);
+
+			sort(temp, temp + 4);           //升序排序
+			for (int i = 0; i < 4; i++)     //获得升序排序数
+				bstr += to_string(temp[i]);
+
+			n = to_string(atoi(astr.c_str()) - atoi(bstr.c_str()));
+			for (int i = 0; i < 4 - n.size(); i++)
+				n = "0" + n;
+
+			cout << astr << " - " << bstr << " = " << n << endl;
+		}
+	}
+	return 0;
+}
