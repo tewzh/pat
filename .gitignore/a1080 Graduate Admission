@@ -1,0 +1,84 @@
+// pata1080.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"algorithm"
+#include"vector"
+using namespace std;
+
+const int N = 40000;
+const int M = 100;
+const int K = 5;
+
+//定义学生结构体，包含学生id,笔试成绩，面试成绩，平均分，志愿选择数组，录取学校编号和录取状态
+struct stu{     
+	int id;
+	int ge;
+	int gi;
+	double avg;
+	int choice[K];
+	int adsch;
+	bool status;
+}Stu[N];
+
+//定义排序规则，平均分相等时按笔试成绩从大到小排序，否则根据平均分进行排序
+bool compare(stu a, stu b){  
+	if (a.avg == b.avg)
+		return a.ge > b.ge;
+	else
+		return a.avg > b.avg;
+	
+}
+
+int main(){
+	int n, m, k;
+	cin >> n >> m >> k;
+	int quota[M];
+	vector<int> s[M];
+	for (int i = 0; i < m; i++)
+		cin >> quota[i];
+	for (int i = 0; i < n; i++){              //按照要求依次输入每个学生的笔试成绩，面试成绩和k个志愿选择
+		cin >> Stu[i].ge >> Stu[i].gi;
+		for (int j = 0; j < k; j++)
+			cin >> Stu[i].choice[j];
+		Stu[i].id = i;
+		Stu[i].avg = (Stu[i].ge + Stu[i].gi) / 2;
+		Stu[i].status = false;
+	}
+	sort(Stu, Stu + n, compare);       //按照平均分从低到高进行排序
+	//录取规则，根据每个学生的平均分从高到低进行录取，根据志愿的顺序依次进行录取（第一志愿不能满足时则进行
+	//第二志愿的录取，以此类推），如果目标院校录取名额不足时，则该志愿录取失败，进行下一个志愿的录取
+	for (int i = 0; i < n; i++){
+		for (int j = 0; j < k; j++){
+			//当两个考生的平均分一致，笔试成绩一致而且志愿的目标院校一致，但是该目标院校名额不足时，这两名考生同时录取
+			if (quota[Stu[i].choice[j]] == 0 && Stu[i].avg == Stu[i - 1].avg&&Stu[i].ge == Stu[i - 1].ge&&Stu[i].choice[j]==Stu[i-1].adsch){
+				Stu[i].status = true;
+				Stu[i].adsch = Stu[i].choice[j];
+				s[Stu[i].choice[j]].push_back(Stu[i].id);
+				break;
+			}
+			//当目标院校名额充足时进行录取，名额数减1，修改考生的录取状态和录取院校编号，同时目标院校保存该考生id号
+			if (quota[Stu[i].choice[j]] > 0){
+				quota[Stu[i].choice[j]]--;
+				Stu[i].status = true;
+				Stu[i].adsch = Stu[i].choice[j];
+				s[Stu[i].choice[j]].push_back(Stu[i].id);
+				break;
+			}
+			else
+				continue;
+		}
+	}
+	for (int i = 0; i < m; i++){
+		sort(s[i].begin(), s[i].end());    //按照考生id号进行从小到大进行排序
+		if (s[i].size() != 0){
+			for (int j = 0; j < s[i].size() - 1; j++)     //控制输出格式和输出值
+				cout << s[i][j] << " ";
+			cout << s[i][s[i].size() - 1] << endl;
+		}
+		else
+			cout << endl;
+	}
+	return 0;
+}
