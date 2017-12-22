@@ -1,0 +1,45 @@
+// pata1040.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+#include"algorithm"
+using namespace std;
+
+const int N = 2005;
+
+int main(){
+	string str;
+	getline(cin,str);  //使用getline输入可以接收空格
+	int strlen = str.size();
+
+	//添加“#”字符生成新串
+	string strtmp = "#";
+	for (int i = 0; i < strlen; i++)
+		strtmp += str.substr(i, 1) + "#";
+
+	//mx为之前计算的最长回文串的右端点的最大值，id为取得这个最大值的位置的id
+	int id = 1, mx = 0;
+	int len[N];
+
+
+	for (int i = 0; i < strtmp.size(); i++){
+		if (mx>i)
+			len[i] = min(len[2 * id - i], mx - i);
+		else
+			len[i] = 1;
+		while (i >= len[i] && strtmp.substr(i + len[i], 1) == strtmp.substr(i - len[i], 1))
+			len[i]++;
+		if (i + len[i] > mx){
+			mx = i + len[i];
+			id = i;
+		}
+	}
+	int res = 1;
+	for (int i = 1; i < strtmp.size(); i++){
+		res = max(res, len[i]);
+	}
+	cout << res - 1 << endl;
+	return 0;
+}
