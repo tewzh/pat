@@ -1,0 +1,74 @@
+// pata1088.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"string"
+using namespace std;
+
+long int gcd(long int a, long int b){   //求最大公约数函数
+	long int r;
+	while (b != 0){
+		r = a%b;
+		a = b;
+		b = r;
+	}
+	return a;
+}
+
+string fun(long int a, long int b){    //保证b！=0
+	string str;
+	if (a == 0)
+		return "0";
+	int flag = 1;
+	if (a < 0){     //当a为负数时
+		flag = -1;
+		a = -a;
+		str = "(-";
+	}
+	long int temp = gcd(a, b);
+	a /= temp;
+	b /= temp;
+	if (a%b == 0)       //只有整数部分时
+		str += to_string(a / b);
+	else if (a / b > 0){   //整数部分加分数部分
+		str += to_string(a / b) + " ";
+		str += to_string(a % b) + "/" + to_string(b);
+	}
+	else   //只有分数部分时
+		str += to_string(a) + "/" + to_string(b);
+	if (flag == -1)
+		str += ")";
+	return str;
+}
+
+int main(){
+	long int a1, a2, b1, b2;
+	char t1, t2;
+	cin >> a1 >> t1 >> a2 >> b1 >> t2 >> b2;
+	double sum1, sum2, sub1, sub2, mul1, mul2, div1, div2;
+	sum1 = a1*b2 + a2*b1;
+	sum2 = a2*b2;
+	sub1 = a1*b2 - a2*b1;
+	sub2 = a2*b2;
+	mul1 = a1*b1;
+	mul2 = a2*b2;
+	string s1 = fun(a1, a2);
+	string s2 = fun(b1, b2);
+	cout << s1 << " + " << s2 << " = " << fun(sum1, sum2) << endl;
+	cout << s1 << " - " << s2 << " = " << fun(sub1, sub2) << endl;
+	cout << s1 << " * " << s2 << " = " << fun(mul1, mul2) << endl;
+	cout << s1 << " / " << s2 << " = ";
+	if (b1 == 0)
+		cout << "Inf" << endl;
+	else{
+		div1 = a1*b2;
+		div2 = a2*b1;
+		if ((div1 < 0 && div2 < 0) || (div1>0 && div2<0)){
+			div1 = -div1;
+			div2 = -div2;
+		}
+		cout << fun(div1, div2)<<endl;
+	}
+	return 0;
+}
