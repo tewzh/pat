@@ -1,0 +1,67 @@
+// pata1013.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include<stdio.h>
+using namespace std;
+
+//只可以使用scanf和printf进行输入和输出，使用cin和cout会发生超时，ms范围内会相差一个数量级
+
+const int N = 1000;
+int father[N];
+
+int findFather(int x){    //查找
+	if (x == father[x])
+		return x;
+	else
+		return father[x] = findFather(father[x]);
+		//return findFather(father[x]);    //性能相差巨大，该语句使用时超时
+}
+
+void Union(int a, int b){        //合并
+	int faA = findFather(a);
+	int faB = findFather(b);
+	if (faA!=faB)
+		father[faA] = faB;
+}
+
+
+int main(){
+	int n, m, k;
+	scanf("%d %d %d", &n, &m, &k);
+	int highways[N*N][2];
+
+	//输入两个城市之间的highways
+	for (int i = 0; i < m; i++)
+		scanf("%d %d", &highways[i][0], &highways[i][1]);
+
+	for (int i = 0; i < k; i++){
+		int city;
+		scanf("%d", &city);
+		int res = 0;
+
+		//初始化father数组
+		for (int j = 1; j <= n; j++)
+			father[j] = j;
+
+		for (int j = 0; j < m; j++)
+			//对除city之外的所有城市的highways求并集
+			if (highways[j][0] != city&&highways[j][1] != city)
+				Union(highways[j][0], highways[j][1]);
+		for (int j = 1; j <= n; j++)
+			//除city之外的所有城市变成孤城的个数
+			if (j != city&&father[j] == j)
+				res++;
+
+		if (m == 0)
+			printf("0\n");
+		else
+			printf("%d\n", res - 1);
+		
+	}
+	return 0;
+}
+
+
+
+
