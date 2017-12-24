@@ -1,0 +1,74 @@
+// pata1097.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+#include"stdio.h"
+#include"map"
+#include"vector"
+#include"string"
+#include"algorithm"
+using namespace std;
+
+struct node{    //定义node结构体
+	int start;
+	int key;
+	int end;
+};
+
+//使用cin和cout作为输入和输出测试点3和测试点4会发生超时
+//使用scanf和printf测试点3 99ms   测试点4 107ms
+
+int main(){
+	int startnode;
+	int n;
+	//cin >> startnode >> n;
+	scanf("%d %d", &startnode, &n);
+	map<int, node> mp;    //根据address保存list结构
+	map<int, int> mk;     //保存key的个数映射
+	for (int i = 0; i < n; i++){   //根据输入建立list结构 
+		int tempstart, tempend;
+		int tempkey;
+		/*cin >> tempstart >> tempkey >> tempend;*/
+		scanf("%d %d %d", &tempstart,&tempkey,&tempend);
+		mp[tempstart] = {tempstart,tempkey,tempend};
+	}
+
+	//定义两个vector容器，vc1保存kept list，vc2保存remove list
+	vector<node> vc1, vc2;
+
+	//根据要求将每个node分别加入到vc1或vc2中
+	while (startnode != -1){
+		if (mk[abs(mp[startnode].key)] == 0)
+			vc1.push_back(mp[startnode]);
+		else
+			vc2.push_back(mp[startnode]);
+		mk[abs(mp[startnode].key)]++;
+		startnode = mp[startnode].end;
+	}
+
+	//输出kept list结果
+	for (int i = 0; i < vc1.size(); i++){
+		//cout << vc1[i].start << " " << vc1[i].key << " ";
+		printf("%05d %d ", vc1[i].start, vc1[i].key);
+		if (i == vc1.size() - 1)
+			//cout << "-1" << endl;
+			printf("-1\n");
+		else
+			//cout << vc1[i + 1].start << endl;
+			printf("%05d\n", vc1[i + 1].start);
+	}
+
+	//输出remove list结果
+	for (int i = 0; i < vc2.size(); i++){
+		//cout << vc2[i].start << " " << vc2[i].key << " ";
+		printf("%05d %d ", vc2[i].start, vc2[i].key);
+		if (i == vc2.size() - 1)
+			//cout << "-1" << endl;
+			printf("-1\n");
+		else
+			//cout << vc2[i + 1].start << endl;
+			printf("%05d\n", vc2[i + 1].start);
+	}
+	return 0;
+}
