@@ -1,0 +1,74 @@
+// pata1098.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"stdio.h"
+#include"algorithm"
+using namespace std;
+
+const int N = 100;
+
+void print(int a[], int n){   //控制输出结果格式
+	for (int i = 0; i < n - 1; i++)
+		printf("%d ", a[i]);
+	printf("%d\n", a[n - 1]);
+}
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	int a[N], b[N];
+	for (int i = 0; i < n; i++)
+		scanf("%d", &a[i]);
+	for (int i = 0; i < n; i++)
+		scanf("%d", &b[i]);
+
+	//判断待检测数组是否为插入排序数组
+	bool isInsertSort = true;
+	int j;
+	for (j = 0; j < n; j++){
+		if (b[j]>b[j + 1])
+			break;
+	}
+	int index = j;
+	for (j = j + 1; j < n; j++)
+		if (a[j] != b[j]){
+			isInsertSort = false;
+			break;
+		}
+
+	if (isInsertSort){
+		printf("Insertion Sort\n");
+		sort(a, a + index + 2);
+		print(a, n);
+	}
+	else{
+		printf("Heap Sort\n");
+		int pos = 0, max, last = 0;
+
+		//从后往前查找堆排序中第一个小于根的元素，并将该元素与根元素互换
+		for (int i = n - 1; i >= 0; i--){
+			if (b[i] < b[0]){
+				last = i;
+				break;
+			}
+		}
+		swap(b[0], b[last]);
+
+		//进行一次堆的调整，调整根元素大于等于左右孩子，将最大数赋值给根元素
+		while (pos < last){
+			max = pos;
+			if (pos * 2 + 1 < last&&b[pos * 2 + 1] > b[max])
+				max = pos * 2 + 1;
+			if (pos * 2 + 2 < last&&b[pos * 2 + 2] > b[max])
+				max = pos * 2 + 2;
+			if (max == pos)
+				break;
+			swap(b[pos], b[max]);
+			pos = max;
+		}
+		print(b, n);
+	}
+
+	return 0;
+}
